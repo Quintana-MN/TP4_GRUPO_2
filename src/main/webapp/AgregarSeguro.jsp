@@ -4,9 +4,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Página Agregar Seguro</title>
 </head>
 <body>
-
+<a href="Inicio.jsp">
+Inicio
+</a>
+<br>
+<a href="ListarSeguros.jsp">
+Listar Seguros
+</a>
 </body>
 </html>
