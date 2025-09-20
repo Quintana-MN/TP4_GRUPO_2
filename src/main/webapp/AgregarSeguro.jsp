@@ -22,6 +22,7 @@
 		<select name="tipoSeguro">
 			<option>Seguro de Casas</option>
 			<option>Seguro de Autos</option>
+			<option>Seguro de motos</option>
 		</select><br>
 		Costo contratación: <input type="text" name="txtContratacion"><br>
 		Costo Máximo Asegurado: <input type="text" name="txtCostoAseg"><br>
