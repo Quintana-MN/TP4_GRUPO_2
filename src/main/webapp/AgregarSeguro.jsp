@@ -26,7 +26,7 @@
 		</select><br>
 		Costo contratación: <input type="text" name="txtContratacion"><br>
 		Costo Máximo Asegurado: <input type="text" name="txtCostoAseg"><br>
-		<input type="submit" name="btnAceptar">
+		<input type="submit" name="btnAceptar" value = "Aceptar">
 	</form>
 </body>
 </html>
