@@ -18,6 +18,12 @@ public class DaoSeguro {
 	}
 	
 	public int agregarSeguro(Seguro seguro) {
+		try {
+		    Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
 		
 		String query = "INSERT INTO Seguro(descripcion, idTipo, costoContratacion, costoAsegurado) VALUES ('"
 			    + seguro.getDescripción() + "', "
@@ -26,6 +32,7 @@ public class DaoSeguro {
 			    + seguro.getCostoMaximoAsegurado() + ")";
 		Connection cn = null;
 		int filas= 0;
+	
 		try {
 			cn=DriverManager.getConnection(host+dbName,user,pass);
 			Statement st= cn.createStatement();
