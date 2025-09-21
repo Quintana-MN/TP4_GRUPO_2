@@ -7,26 +7,47 @@
 <title>Página Agregar Seguro</title>
 </head>
 <body>
+<fieldset>
 	<header>
 	<a href="Inicio.jsp">Inicio</a>
-	<a href="ListarSeguros.jsp">Listar Seguros</a>
 	<a href="AgregarSeguro.jsp">Agregar Sucursal</a>
+	<a href="ListarSeguros.jsp">Listar Seguros</a>
 	</header>
 	
 	<h1>Agregar Seguro</h1>
 	
 	<form action="AgregarSeguro.jsp" method="get">
-		Id Seguro: <span></span> <br>
-		Descripción: <input type="text" name="txtDescipcion"><br>
-		Tipo de Seguro:
-		<select name="tipoSeguro">
+	<table>
+		<tr>
+		<td>Id Seguro:</td><td><span></span></td>
+		</tr>
+		<tr>
+		<td>Descripción:</td> <td><input type="text" name="txtDescipcion"></td>
+		</tr>
+		<tr>
+		<td>Tipo de Seguro:</td>
+		<td><select name="tipoSeguro">
 			<option>Seguro de Casas</option>
 			<option>Seguro de Autos</option>
 			<option>Seguro de motos</option>
-		</select><br>
-		Costo contratación: <input type="text" name="txtContratacion"><br>
-		Costo Máximo Asegurado: <input type="text" name="txtCostoAseg"><br>
-		<input type="submit" name="btnAceptar" value = "Aceptar">
+		</select>
+			</td>
+			</tr>
+		<tr>
+		<td>Costo contratación:</td> <td><input type="text" name="txtContratacion"></td>
+		</tr>
+		<tr>
+		<td>Costo Máximo Asegurado:</td> <td><input type="text" name="txtCostoAseg"></td>
+		</tr>
+		<tr>
+		<td></td> <td><input type="submit" name="btnAceptar" value = "Aceptar"></td>
+		</tr>
+		<tr>
+		<td><input type="submit" name="btnAceptar" value = "Aceptar"></td>
+
+		</tr>
+		</table>
 	</form>
+</fieldset>
 </body>
 </html>

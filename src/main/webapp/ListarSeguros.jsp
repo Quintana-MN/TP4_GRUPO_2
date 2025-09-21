@@ -7,15 +7,13 @@
 <title>Página Listar Seguros</title>
 </head>
 <body>
-<a href="Inicio.jsp">
-Inicio
-</a>
-<br>
-<a href="AgregarSeguro.jsp">
-Agregar Seguros
-</a>
-<h1>Tipos de Datos</h1>
-<br>
+<header>
+	<a href="Inicio.jsp">Inicio</a>
+	<a href="AgregarSeguro.jsp">Agregar Sucursal</a>
+	<a href="ListarSeguros.jsp">Listar Seguros</a>
+</header>
+<h1>Tipos de seguros en la base de datos</h1>
+
 Busqueda por tipos de seguros <select name="tipoSeguro">
 			<option>Seguro de Casas</option>
 			<option>Seguro de Autos</option>
@@ -23,6 +21,24 @@ Busqueda por tipos de seguros <select name="tipoSeguro">
 		</select>
 		<input type="submit" name="fitrarTabla" value="Filtro"> 
 
+
+<table border="1">
+<tr>
+<th>ID Seguro</th>
+<th>Descripción Seguro</th>
+<th>Descripción Tipo Seguro</th>
+<th>Costo Contratación</th>
+<th>Costo Máximo Asegurado</th>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
 
 </body>
 </html>
