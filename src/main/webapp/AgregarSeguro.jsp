@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="dominio.DaoSeguro"%>
+<%@page import="dominio.Seguro"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,14 +24,14 @@
 		<td>Id Seguro:</td><td><span></span></td>
 		</tr>
 		<tr>
-		<td>Descripción:</td> <td><input type="text" name="txtDescipcion"></td>
+		<td>Descripción:</td> <td><input type="text" name="txtDescripcion"></td>
 		</tr>
 		<tr>
 		<td>Tipo de Seguro:</td>
 		<td><select name="tipoSeguro">
-			<option>Seguro de Casas</option>
-			<option>Seguro de Autos</option>
-			<option>Seguro de motos</option>
+			<option value="1">Seguro de Casas</option>
+			<option value="2">Seguro de Autos</option>
+			<option value="3">Seguro de motos</option>
 		</select>
 			</td>
 			</tr>
@@ -43,11 +45,38 @@
 		<td></td> <td><input type="submit" name="btnAceptar" value = "Aceptar"></td>
 		</tr>
 		<tr>
-		<td><input type="submit" name="btnAceptar" value = "Aceptar"></td>
 
 		</tr>
 		</table>
 	</form>
+	<%
+	    int filas = 0;
+	    if (request.getParameter("btnAceptar") != null) {
+	        String descripcion = request.getParameter("txtDescripcion");
+	        String tipoSeguroStr = request.getParameter("tipoSeguro");
+	        String contratacionStr = request.getParameter("txtContratacion");
+	        String costoAsegStr = request.getParameter("txtCostoAseg");
+			
+	        Seguro seguro = new Seguro();
+			seguro.setIdTipoSeguro(Integer.parseInt(tipoSeguroStr));
+			seguro.setCostoContratacion(Integer.parseInt(contratacionStr));
+			seguro.setCostoMaximoAsegurado(Integer.parseInt(costoAsegStr));
+			seguro.setDescripcion(descripcion);
+
+	        DaoSeguro daoSeguro = new DaoSeguro();
+	        filas = daoSeguro.agregarSeguro(seguro);
+			
+		}
+		%>
+		<%
+			if (filas > 0) 
+			{
+	            out.println("<p>Seguro agregado correctamente.</p>");
+	        } else {
+	            out.println("<p>Error al agregar el seguro.</p>");
+	        }
+	%>
+
 </fieldset>
 </body>
 </html>

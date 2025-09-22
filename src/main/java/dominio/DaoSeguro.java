@@ -25,8 +25,8 @@ public class DaoSeguro {
 		    e.printStackTrace();
 		}
 		
-		String query = "INSERT INTO Seguro(descripcion, idTipo, costoContratacion, costoAsegurado) VALUES ('"
-			    + seguro.getDescripción() + "', "
+		String query = "INSERT INTO seguros(descripcion, idTipo, costoContratacion, costoAsegurado) VALUES ('"
+			    + seguro.getDescripcion() + "', "
 			    + seguro.getIdTipoSeguro() + ", "
 			    + seguro.getCostoContratacion() + ", "
 			    + seguro.getCostoMaximoAsegurado() + ")";
@@ -43,7 +43,4 @@ public class DaoSeguro {
 		}
 		return filas;
 	}
-	
-	
-
 }
