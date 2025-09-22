@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dominio.DaoSeguro;
+import dominio.Seguro;
 import dominio.tipoSeguro;
 
 @WebServlet("/servletSeguro")
@@ -22,17 +23,33 @@ public class servletSeguro extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getParameter("btnCargaTS") != null) {
-			DaoSeguro ds = new DaoSeguro();
-			ArrayList<tipoSeguro> listaTipoSeguros = ds.listarTipoSeguros();
-			
-			request.setAttribute("listaTS", listaTipoSeguros);
-			
-			RequestDispatcher rd = request.getRequestDispatcher("/AgregarSeguro.jsp");   
-			rd.forward(request, response);			
-		}
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        DaoSeguro dao = new DaoSeguro();
+
+        ArrayList<tipoSeguro> listaTipoSeguros = dao.listarTipoSeguros();
+        request.setAttribute("listaTS", listaTipoSeguros);
+
+        if (request.getParameter("btnAceptar") != null) {
+            String descripcion = request.getParameter("txtDescripcion");
+            String tipoSeguroStr = request.getParameter("tipoSeguro");
+            String contratacionStr = request.getParameter("txtContratacion");
+            String costoAsegStr = request.getParameter("txtCostoAseg");
+
+            Seguro seguro = new Seguro();
+            seguro.setDescripcion(descripcion);
+            seguro.setIdTipoSeguro(Integer.parseInt(tipoSeguroStr));
+            seguro.setCostoContratacion(Integer.parseInt(contratacionStr));
+            seguro.setCostoMaximoAsegurado(Integer.parseInt(costoAsegStr));
+
+            int filas = dao.agregarSeguro(seguro);
+
+            request.setAttribute("cantFilas", filas);
+        }
+
+        RequestDispatcher rd = request.getRequestDispatcher("/AgregarSeguro.jsp");
+        rd.forward(request, response);
+    }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub

@@ -46,7 +46,7 @@
 								for (tipoSeguro ts : listaTipoSeguros)
 								{
 							%>
-									<option><%= ts.getDescripcion() %></option>
+									<option value="<%= ts.getTipoSeguro() %>"><%= ts.getDescripcion() %></option>
 							<%	
 								}
 							%>
@@ -71,40 +71,17 @@
 		</form>
 	</fieldset>
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		<%
-		    int filas = 0;
-		    if (request.getParameter("btnAceptar") != null) {
-		        String descripcion = request.getParameter("txtDescripcion");
-		        String tipoSeguroStr = request.getParameter("tipoSeguro");
-		        String contratacionStr = request.getParameter("txtContratacion");
-		        String costoAsegStr = request.getParameter("txtCostoAseg");
-				
-		        Seguro seguro = new Seguro();
-				seguro.setIdTipoSeguro(Integer.parseInt(tipoSeguroStr));
-				seguro.setCostoContratacion(Integer.parseInt(contratacionStr));
-				seguro.setCostoMaximoAsegurado(Integer.parseInt(costoAsegStr));
-				seguro.setDescripcion(descripcion);
-	
-		        DaoSeguro daoSeguro = new DaoSeguro();
-		        filas = daoSeguro.agregarSeguro(seguro);
-				
-			}
+		   int filas=0;
+		   if(request.getAttribute("cantFilas")!=null)
+		   {
+			filas = Integer.parseInt(request.getAttribute("cantFilas").toString());
+		   }
 			%>
 			<%
 				if (filas > 0) 
 				{
 		            out.println("<p>Seguro agregado correctamente.</p>");
-		        } else {
-		            out.println("<p>Error al agregar el seguro.</p>");
 		        }
 		%>
 </body>
