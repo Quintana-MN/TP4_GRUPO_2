@@ -14,6 +14,7 @@ import dominio.DaoSeguro;
 import dominio.Seguro;
 import dominio.tipoSeguro;
 
+
 @WebServlet("/servletSeguro")
 public class servletSeguro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -52,8 +53,18 @@ public class servletSeguro extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		doGet(request, response);
+		
+		
+		DaoSeguro daoSeg= new DaoSeguro();
+		ArrayList<seguroConDescTipo> lista= daoSeg.listarSeguros();
+		
+		request.setAttribute("listaSegurosConDescripcion", lista);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/ListarSeguros.jsp");
+		rd.forward(request, response);
+		
 	}
 
 }
