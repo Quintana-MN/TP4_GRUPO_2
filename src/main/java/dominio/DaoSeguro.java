@@ -3,6 +3,7 @@ package dominio;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -47,6 +48,7 @@ public class DaoSeguro {
 		}
 		return filas;
 	}
+
 	
 	// LISTA DE TIPOS DE SEGUROS
 	public ArrayList<tipoSeguro> listarTipoSeguros()
@@ -82,6 +84,8 @@ public class DaoSeguro {
 		
 		return listaTipoSeguros;
 	}
+	
+	
 	// LISTA DE SEGUROS
 	public ArrayList<seguroConDescTipo> listarSeguros()
 	{
@@ -104,15 +108,13 @@ public class DaoSeguro {
 			
 			while(rst.next()) {
 				seguroConDescTipo seg = new seguroConDescTipo ();
-				
-				
+							
 				seg.setIdSeguro(rst.getInt("idSeguro"));
 				seg.setDescripcion(rst.getString("descripcion"));
 				seg.setDescripcionTipoSeguro(rst.getString("descTipo"));
 				seg.setCostoContratacion(rst.getInt("costoContratacion"));
 				seg.setCostoMaximoAsegurado(rst.getInt("costoAsegurado"));
-				
-			
+							
 				listaSeguros.add(seg); 
 			}
 			conec.close();
@@ -122,12 +124,41 @@ public class DaoSeguro {
 		}finally {
 			
 		}
-		
-		
+			
 		return listaSeguros;
 	}
 	
 	
-	
-	
+	// CONSULTA SELECT PARA OBTENER EL PROXIMO ID SEGURO
+	public int obtenerProximoIdSeguro() {
+		try {
+		    Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+		
+	    int proximoId = 0;
+	    Connection cn = null;
+	    
+	    try {
+	        cn = DriverManager.getConnection(host + dbName, user, pass);
+	        Statement st = cn.createStatement();
+	        String query = "SELECT MAX(idSeguro) AS ultimoId FROM seguros";
+	        ResultSet rs = st.executeQuery(query);
+	        
+	        rs.next();
+	        proximoId = rs.getInt("ultimoId") + 1;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+			try {
+				cn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	    
+	    return proximoId;
+	}	
 }

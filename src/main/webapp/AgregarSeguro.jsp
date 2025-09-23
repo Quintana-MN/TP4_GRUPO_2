@@ -22,9 +22,27 @@
 		
 		<form action="servletSeguro" method="get">
 			<table>
+			
+				<!-- OBTENEMOS PRIXIMO ID DE SEGURO -->
+				<%
+				 	int proximoId = -1;
+					if (request.getAttribute("proximoId") != null){
+						proximoId = (int) request.getAttribute("proximoId");
+					}
+				%>
 				<tr>
-					<td>Id Seguro:</td><td><span></span></td>
+					<td>Id Seguro:</td>
+						<%
+							if(proximoId != -1){
+
+						%>
+							<td><span><%= proximoId %></span></td>
+						<%	
+							}
+						%>
 				</tr>
+				
+				
 				<tr>
 					<td>Descripción:</td> <td><input type="text" name="txtDescripcion"></td>
 				</tr>
@@ -62,7 +80,7 @@
 					<td>Costo Máximo Asegurado:</td> <td><input type="text" name="txtCostoAseg"></td>
 				</tr>
 				<tr>
-					<td></td> <td><input type="submit" name="btnCargaTS" value = "Cargar Tipo de Seguros"></td>
+					<td></td> <td><input type="submit" name="btnCargaTS" value = "Cargar nuevo ID Seguro y Tipo de Seguros"></td>
 				</tr>
 				<tr>
 					<td><input type="submit" name="btnAceptar" value = "Aceptar"></td>

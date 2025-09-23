@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dominio.DaoSeguro;
 import dominio.Seguro;
+import dominio.seguroConDescTipo;
 import dominio.tipoSeguro;
 
 
@@ -28,8 +29,13 @@ public class servletSeguro extends HttpServlet {
 
         DaoSeguro dao = new DaoSeguro();
 
+        // OBTENEMOS TODOS LOS TIPOS DE SEGUROS
         ArrayList<tipoSeguro> listaTipoSeguros = dao.listarTipoSeguros();
         request.setAttribute("listaTS", listaTipoSeguros);
+        
+        // OBTENEMOS PRIXIMO ID DE SEGURO
+        int proximoId  = dao.obtenerProximoIdSeguro();
+        request.setAttribute("proximoId", proximoId);
 
         if (request.getParameter("btnAceptar") != null) {
             String descripcion = request.getParameter("txtDescripcion");
