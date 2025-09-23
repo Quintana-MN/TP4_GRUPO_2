@@ -1,3 +1,4 @@
+<%@ page import="dominio.Seguro" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,13 +15,24 @@
 </header>
 <h1>Tipos de seguros en la base de datos</h1>
 
+<form action="servletFiltro" method="get">
 Busqueda por tipos de seguros <select name="tipoSeguro">
-			<option>Seguro de Casas</option>
-			<option>Seguro de Autos</option>
-			<option>Seguro de motos</option>
+			<option value="1">Seguro de Casas</option>
+			<option value="2">Seguro de Vida</option>
+			<option value= "3">Seguro de motos</option>
 		</select>
 		<input type="submit" name="fitrarTabla" value="Filtro"> 
+</form>
 
+
+<%
+
+	ArrayList<Seguro> listaFiltro;
+	if(request.getAttribute("filtroU")!=null)
+	{
+		listaFiltro = (ArrayList<Seguro>)request.getAttribute("filtroU");
+	}
+%>
 
 <table border="1">
 <tr>
@@ -31,14 +43,23 @@ Busqueda por tipos de seguros <select name="tipoSeguro">
 <th>Costo Máximo Asegurado</th>
 </tr>
 
+<%
+	for(Seguro seg : listaFiltro)
+	{
+%>
+
 <tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td><%=seg.getIdSeguro()%></td>
+<td><%=seg.getDescripcion()%></td>
+<td><%=seg.getIdTipoSeguro()%></td>
+<td><%=seg.getCostoContratacion()%></td>
+<td><%=seg.getCostoMaximoAsegurado()%></td>
 </tr>
+
+<%} %>
 </table>
+
+
 
 </body>
 </html>

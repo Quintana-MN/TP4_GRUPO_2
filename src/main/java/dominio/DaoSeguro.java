@@ -2,6 +2,7 @@ package dominio;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -160,5 +161,48 @@ public class DaoSeguro {
 		}
 	    
 	    return proximoId;
-	}	
+	}
+	
+	public ArrayList<seguroConDescTipo> filtrarSeguros(int id)
+	{
+		try {
+		    Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+		
+		ArrayList<seguroConDescTipo> listaSeguros = new ArrayList<seguroConDescTipo>();
+		String query = "SELECT idSeguro, descripcion, costoContratacion, costoAsegurado, tiposeguros.descripcion AS descTipo FROM seguros JOIN tiposeguros ON seguros.idTipo = tiposeguros.idTipo "
+				+ "WHERE idTipo = ?";
+		
+		Connection conec = null;
+	
+		try {
+			conec = DriverManager.getConnection(host + dbName, user, pass);
+			PreparedStatement pst = conec.prepareStatement(query);
+			pst.setInt(1, id);
+			ResultSet rst = pst.executeQuery();
+			
+			while(rst.next()) {
+				seguroConDescTipo seg = new seguroConDescTipo ();
+							
+				seg.setIdSeguro(rst.getInt("idSeguro"));
+				seg.setDescripcion(rst.getString("descripcion"));
+				seg.setDescripcionTipoSeguro(rst.getString("descTipo"));
+				seg.setCostoContratacion(rst.getInt("costoContratacion"));
+				seg.setCostoMaximoAsegurado(rst.getInt("costoAsegurado"));
+							
+				listaSeguros.add(seg); 
+			}
+			conec.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			
+		}
+			
+		return listaSeguros;
+	}
 }

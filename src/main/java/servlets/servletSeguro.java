@@ -71,6 +71,16 @@ public class servletSeguro extends HttpServlet {
 		RequestDispatcher rd = request.getRequestDispatcher("/ListarSeguros.jsp");
 		rd.forward(request, response);
 		
+		if(request.getParameter("fitrarTabla")!=null)
+		{
+			ArrayList<DaoSeguro> listaFiltro = daoSeg.filtrarSeguros(request.getParameter("tipoSeguro"));
+			
+			request.setAttribute("filtroU",listaFiltro);
+			
+			rd = request.getRequestDispatcher("/ListarSeguros.jsp");
+			rd.forward(request, response);
+		}
+		
 	}
 
 }
