@@ -163,7 +163,7 @@ public class DaoSeguro {
 	    return proximoId;
 	}
 	
-	public ArrayList<seguroConDescTipo> filtrarSeguros(int id)
+	public ArrayList<Seguro> filtrarSeguros(int id)
 	{
 		try {
 		    Class.forName("com.mysql.jdbc.Driver");
@@ -172,7 +172,7 @@ public class DaoSeguro {
 		    e.printStackTrace();
 		}
 		
-		ArrayList<seguroConDescTipo> listaSeguros = new ArrayList<seguroConDescTipo>();
+		ArrayList<Seguro> listaSeguros = new ArrayList<Seguro>();
 		String query = "SELECT idSeguro, descripcion, costoContratacion, costoAsegurado, tiposeguros.descripcion AS descTipo FROM seguros JOIN tiposeguros ON seguros.idTipo = tiposeguros.idTipo "
 				+ "WHERE idTipo = ?";
 		
@@ -185,11 +185,11 @@ public class DaoSeguro {
 			ResultSet rst = pst.executeQuery();
 			
 			while(rst.next()) {
-				seguroConDescTipo seg = new seguroConDescTipo ();
+				Seguro seg = new Seguro ();
 							
 				seg.setIdSeguro(rst.getInt("idSeguro"));
 				seg.setDescripcion(rst.getString("descripcion"));
-				seg.setDescripcionTipoSeguro(rst.getString("descTipo"));
+				seg.setIdTipoSeguro(rst.getInt("idTipo"));
 				seg.setCostoContratacion(rst.getInt("costoContratacion"));
 				seg.setCostoMaximoAsegurado(rst.getInt("costoAsegurado"));
 							

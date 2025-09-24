@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dominio.DaoSeguro;
+import dominio.Seguro;
 
 /**
  * Servlet implementation class servletFiltro
@@ -32,7 +33,7 @@ public class servletFiltro extends HttpServlet {
 		if(request.getParameter("fitrarTabla")!=null)
 		{
 			DaoSeguro daoSeg = new DaoSeguro();
-			ArrayList<DaoSeguro> listaFiltro = daoSeg.filtrarSeguros(Integer.ParseInt(request.getParameter("tipoSeguro")));
+			ArrayList<Seguro> listaFiltro = daoSeg.filtrarSeguros(Integer.ParseInt(request.getParameter("tipoSeguro")));
 			
 			request.setAttribute("filtroU",listaFiltro);
 			
