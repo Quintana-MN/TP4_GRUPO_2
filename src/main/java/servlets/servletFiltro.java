@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dominio.DaoSeguro;
 import dominio.Seguro;
+import dominio.seguroConDescTipo;
 
 @WebServlet("/servletFiltro")
 public class servletFiltro extends HttpServlet {
@@ -32,7 +33,7 @@ public class servletFiltro extends HttpServlet {
 		{
 			DaoSeguro daoSeg = new DaoSeguro();
 			int tipoFilas = Integer.parseInt(request.getParameter("tipoSeguro"));
-			ArrayList<Seguro> listaFiltro = daoSeg.filtrarSeguros(tipoFilas);
+			ArrayList<seguroConDescTipo> listaFiltro = daoSeg.filtrarSeguros(tipoFilas);
 			
 			request.setAttribute("filtroU",listaFiltro);
 			

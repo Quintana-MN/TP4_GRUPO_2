@@ -1,4 +1,5 @@
 <%@ page import="dominio.Seguro" %>
+<%@ page import="dominio.seguroConDescTipo" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -27,11 +28,10 @@ Busqueda por tipos de seguros <select name="tipoSeguro">
 
 
 <%
-
-	ArrayList<Seguro> listaFiltro = null;
+	ArrayList<seguroConDescTipo> listaFiltro = null;
 	if(request.getAttribute("filtroU")!=null)
 	{
-		listaFiltro = (ArrayList<Seguro>)request.getAttribute("filtroU");
+		listaFiltro = (ArrayList<seguroConDescTipo>)request.getAttribute("filtroU");
 	}
 %>
 
@@ -46,14 +46,14 @@ Busqueda por tipos de seguros <select name="tipoSeguro">
 
 <%
     if (listaFiltro != null)
-	for(Seguro seg : listaFiltro)
+	for(seguroConDescTipo seg : listaFiltro)
 	{
 %>
 
 <tr>
 <td><%=seg.getIdSeguro()%></td>
 <td><%=seg.getDescripcion()%></td>
-<td><%=seg.getIdTipoSeguro()%></td>
+<td><%=seg.getDescripcionTipoSeguro()%></td>
 <td><%=seg.getCostoContratacion()%></td>
 <td><%=seg.getCostoMaximoAsegurado()%></td>
 </tr>

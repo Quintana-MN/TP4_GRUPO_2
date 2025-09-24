@@ -16,7 +16,7 @@ import dominio.seguroConDescTipo;
 public class DaoSeguro {
 	public String host="jdbc:mysql://localhost:3306/";
 	private String user="root";
-	private String pass="root";
+	private String pass="0909";
 	private String dbName= "segurosgroup";
 	
 	public DaoSeguro() {
@@ -90,44 +90,43 @@ public class DaoSeguro {
 	// LISTA DE SEGUROS
 	public ArrayList<seguroConDescTipo> listarSeguros()
 	{
-		try {
-		    Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-		
-		ArrayList<seguroConDescTipo> listaSeguros = new ArrayList<seguroConDescTipo>();
-		String query = "SELECT idSeguro, descripcion, costoContratacion, costoAsegurado, tiposeguros.descripcion AS descTipo FROM seguros JOIN tiposeguros ON seguros.idTipo = tiposeguros.idTipo;";
-		
-		Connection conec = null;
-	
-		try {
-			conec = DriverManager.getConnection(host + dbName, user, pass);
-			Statement st = conec.createStatement();
-			ResultSet rst = st.executeQuery(query);
-			
-			while(rst.next()) {
-				seguroConDescTipo seg = new seguroConDescTipo ();
-							
-				seg.setIdSeguro(rst.getInt("idSeguro"));
-				seg.setDescripcion(rst.getString("descripcion"));
-				seg.setDescripcionTipoSeguro(rst.getString("descTipo"));
-				seg.setCostoContratacion(rst.getInt("costoContratacion"));
-				seg.setCostoMaximoAsegurado(rst.getInt("costoAsegurado"));
-							
-				listaSeguros.add(seg); 
-			}
-			conec.close();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}finally {
-			
-		}
-			
-		return listaSeguros;
+	    try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+
+	    ArrayList<seguroConDescTipo> listarSeguros = new ArrayList<seguroConDescTipo>();
+	    String query = "SELECT s.idSeguro, s.descripcion AS descripcionSeguro, s.costoContratacion, s.costoAsegurado, t.descripcion AS descripcionTipo " +
+	                   "FROM seguros s JOIN tiposeguros t ON s.idTipo = t.idTipo";
+
+	    Connection conec = null;
+
+	    try {
+	        conec = DriverManager.getConnection(host + dbName, user, pass);
+	        Statement st = conec.createStatement();
+	        ResultSet rst = st.executeQuery(query);
+
+	        while(rst.next()) {
+	            seguroConDescTipo seg = new seguroConDescTipo();
+
+	            seg.setIdSeguro(rst.getInt("idSeguro"));
+	            seg.setDescripcion(rst.getString("descripcionSeguro"));
+	            seg.setDescripcionTipoSeguro(rst.getString("descripcionTipo"));
+	            seg.setCostoContratacion(rst.getInt("costoContratacion"));
+	            seg.setCostoMaximoAsegurado(rst.getInt("costoAsegurado"));
+
+	            listarSeguros.add(seg); 
+	        }
+	        conec.close();
+	    }
+	    catch(Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return listarSeguros;
 	}
+
 	
 	
 	// CONSULTA SELECT PARA OBTENER EL PROXIMO ID SEGURO
@@ -163,45 +162,46 @@ public class DaoSeguro {
 	    return proximoId;
 	}
 	
-	public ArrayList<Seguro> filtrarSeguros(int id) {
+	public ArrayList<seguroConDescTipo> filtrarSeguros(int id) {
 	    try {
 	        Class.forName("com.mysql.jdbc.Driver");
 	    } catch (ClassNotFoundException e) {
 	        e.printStackTrace();
 	    }
-	    
-	    ArrayList<Seguro> listaSeguros = new ArrayList<Seguro>();
-	    String query = "SELECT s.idSeguro, s.descripcion, s.idTipo, s.costoContratacion, s.costoAsegurado "
-	                 + "FROM seguros s "
-	                 + "JOIN tiposeguros t ON s.idTipo = t.idTipo "
-	                 + "WHERE s.idTipo = ?";
-	    
+
+	    ArrayList<seguroConDescTipo> listaSegurosFiltrados = new ArrayList<seguroConDescTipo>();
+	    String query = "SELECT s.idSeguro, s.descripcion AS descripcionSeguro, s.idTipo, s.costoContratacion, s.costoAsegurado"
+	    		+ "		, tipoSeg.descripcion AS descripcionTipo " +
+	                   "FROM seguros s " +
+	                   "JOIN tiposeguros tipoSeg ON s.idTipo = tipoSeg.idTipo " +
+	                   "WHERE s.idTipo = ?";
+
 	    Connection conec = null;
-	    
+
 	    try {
 	        conec = DriverManager.getConnection(host + dbName, user, pass);
 	        PreparedStatement pst = conec.prepareStatement(query);
 	        pst.setInt(1, id);
 	        ResultSet rst = pst.executeQuery();
-	        
+
 	        while (rst.next()) {
-	            Seguro seg = new Seguro();
-	                        
+	            seguroConDescTipo seg = new seguroConDescTipo();
+
 	            seg.setIdSeguro(rst.getInt("idSeguro"));
-	            seg.setDescripcion(rst.getString("descripcion"));
+	            seg.setDescripcion(rst.getString("descripcionSeguro"));
 	            seg.setIdTipoSeguro(rst.getInt("idTipo"));
-	            seg.setCostoContratacion(rst.getDouble("costoContratacion"));
-	            seg.setCostoMaximoAsegurado(rst.getDouble("costoAsegurado"));
-	                        
-	            listaSeguros.add(seg); 
+	            seg.setDescripcionTipoSeguro(rst.getString("descripcionTipo"));
+	            seg.setCostoContratacion(rst.getInt("costoContratacion"));
+	            seg.setCostoMaximoAsegurado(rst.getInt("costoAsegurado"));
+
+	            listaSegurosFiltrados.add(seg);
 	        }
 	        conec.close();
 	    }
 	    catch(Exception e) {
 	        e.printStackTrace();
 	    }
-	        
-	    return listaSeguros;
-	}
 
+	    return listaSegurosFiltrados;
+	}
 }
