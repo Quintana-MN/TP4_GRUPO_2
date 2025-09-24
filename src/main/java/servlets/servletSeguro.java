@@ -73,7 +73,8 @@ public class servletSeguro extends HttpServlet {
 		
 		if(request.getParameter("fitrarTabla")!=null)
 		{
-			ArrayList<DaoSeguro> listaFiltro = daoSeg.filtrarSeguros(request.getParameter("tipoSeguro"));
+			int Filas = Integer.parseInt(request.getParameter("tipoSeguro"));
+			ArrayList<Seguro> listaFiltro = daoSeg.filtrarSeguros(Filas);
 			
 			request.setAttribute("filtroU",listaFiltro);
 			

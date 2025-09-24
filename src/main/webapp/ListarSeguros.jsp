@@ -28,7 +28,7 @@ Busqueda por tipos de seguros <select name="tipoSeguro">
 
 <%
 
-	ArrayList<Seguro> listaFiltro;
+	ArrayList<Seguro> listaFiltro = null;
 	if(request.getAttribute("filtroU")!=null)
 	{
 		listaFiltro = (ArrayList<Seguro>)request.getAttribute("filtroU");
@@ -45,6 +45,7 @@ Busqueda por tipos de seguros <select name="tipoSeguro">
 </tr>
 
 <%
+    if (listaFiltro != null)
 	for(Seguro seg : listaFiltro)
 	{
 %>

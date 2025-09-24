@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,9 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import dominio.DaoSeguro;
 import dominio.Seguro;
 
-/**
- * Servlet implementation class servletFiltro
- */
 @WebServlet("/servletFiltro")
 public class servletFiltro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -33,7 +31,8 @@ public class servletFiltro extends HttpServlet {
 		if(request.getParameter("fitrarTabla")!=null)
 		{
 			DaoSeguro daoSeg = new DaoSeguro();
-			ArrayList<Seguro> listaFiltro = daoSeg.filtrarSeguros(Integer.ParseInt(request.getParameter("tipoSeguro")));
+			int tipoFilas = Integer.parseInt(request.getParameter("tipoSeguro"));
+			ArrayList<Seguro> listaFiltro = daoSeg.filtrarSeguros(tipoFilas);
 			
 			request.setAttribute("filtroU",listaFiltro);
 			
