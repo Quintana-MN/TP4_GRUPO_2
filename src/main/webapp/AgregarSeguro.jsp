@@ -84,23 +84,23 @@
 				</tr>
 				<tr>
 					<td><input type="submit" name="btnAceptar" value = "Aceptar"></td>
+					<%
+						int filas = 0;
+						if(request.getAttribute("cantFilas") != null)
+						{
+							filas = Integer.parseInt(request.getAttribute("cantFilas").toString());
+						}
+					%>
+					<%
+						if (filas == 1) {
+					%>
+							<td>Seguro agregado correctamente.</td>
+					<%
+						}
+					%>
 				</tr>
 			</table>
-		</form>
-	</fieldset>
-		
-		<%
-		   int filas=0;
-		   if(request.getAttribute("cantFilas")!=null)
-		   {
-			filas = Integer.parseInt(request.getAttribute("cantFilas").toString());
-		   }
-			%>
-			<%
-				if (filas > 0) 
-				{
-		            out.println("<p>Seguro agregado correctamente.</p>");
-		        }
-		%>
+		</form>		
+	</fieldset>	
 </body>
 </html>

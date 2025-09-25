@@ -46,14 +46,15 @@ public class servletSeguro extends HttpServlet {
             Seguro seguro = new Seguro();
             seguro.setDescripcion(descripcion);
             seguro.setIdTipoSeguro(Integer.parseInt(tipoSeguroStr));
-            seguro.setCostoContratacion(Integer.parseInt(contratacionStr));
-            seguro.setCostoMaximoAsegurado(Integer.parseInt(costoAsegStr));
+            seguro.setCostoContratacion(Double.parseDouble(contratacionStr.replace(",", ".")));
+            seguro.setCostoMaximoAsegurado(Double.parseDouble(costoAsegStr.replace(",", ".")));
 
             int filas = dao.agregarSeguro(seguro);
 
             request.setAttribute("cantFilas", filas);
         }
 
+        // REQUESTDISPACHER
         RequestDispatcher rd = request.getRequestDispatcher("/AgregarSeguro.jsp");
         rd.forward(request, response);
     }

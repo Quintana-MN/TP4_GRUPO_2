@@ -8,21 +8,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import dominio.Seguro;
-
-import dominio.seguroConDescTipo;
-
 
 public class DaoSeguro {
 	public String host="jdbc:mysql://localhost:3306/";
 	private String user="root";
-	private String pass="0909";
+	private String pass="root"; // VOLVER A PONER "root" 
 	private String dbName= "segurosgroup";
 	
 	public DaoSeguro() {
 		
 	}
 	
+	// AGREGAMOS SEGURO CON PreparedStatement PARA EVITAR ERRORES CON LOS NUMEROS DECIMALES
 	public int agregarSeguro(Seguro seguro) {
 		try {
 		    Class.forName("com.mysql.jdbc.Driver");
@@ -30,26 +27,35 @@ public class DaoSeguro {
 		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		}
-		
-		String query = "INSERT INTO seguros(descripcion, idTipo, costoContratacion, costoAsegurado) VALUES ('"
-			    + seguro.getDescripcion() + "', "
-			    + seguro.getIdTipoSeguro() + ", "
-			    + seguro.getCostoContratacion() + ", "
-			    + seguro.getCostoMaximoAsegurado() + ")";
-		Connection cn = null;
-		int filas= 0;
-	
-		try {
-			cn=DriverManager.getConnection(host+dbName,user,pass);
-			Statement st= cn.createStatement();
-			filas= st.executeUpdate(query);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		return filas;
-	}
+	    	    
+	    Connection cn = null;
+	    int filas = 0;
 
+	    try {
+	        cn = DriverManager.getConnection(host + dbName, user, pass);
+	        
+	        String query = "INSERT INTO seguros (descripcion, idTipo, costoContratacion, costoAsegurado) VALUES (?, ?, ?, ?)";
+	        
+	        PreparedStatement pst = cn.prepareStatement(query);
+	        pst.setString(1, seguro.getDescripcion());
+	        pst.setInt(2, seguro.getIdTipoSeguro());
+	        pst.setDouble(3, seguro.getCostoContratacion());
+	        pst.setDouble(4, seguro.getCostoMaximoAsegurado());
+
+	        filas = pst.executeUpdate();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+			try {
+				cn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	    }
+
+	    return filas;
+	}
+	
 	
 	// LISTA DE TIPOS DE SEGUROS
 	public ArrayList<tipoSeguro> listarTipoSeguros()
