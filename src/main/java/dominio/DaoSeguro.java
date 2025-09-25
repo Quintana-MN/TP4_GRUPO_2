@@ -19,12 +19,79 @@ public class DaoSeguro {
 		
 	}
 	
+	
+	// LISTA DE TIPOS DE SEGUROS
+	public ArrayList<tipoSeguro> listarTipoSeguros() {
+		try {
+		    Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+		    e.printStackTrace();
+		}
+		
+		ArrayList<tipoSeguro> listaTipoSeguros = new ArrayList<tipoSeguro>();
+		String query = "Select * from tiposeguros";
+		
+		Connection conec = null;
+		
+		try {
+			conec = DriverManager.getConnection(host + dbName, user, pass);
+			Statement st = conec.createStatement();
+			ResultSet rst = st.executeQuery(query);
+			
+			while(rst.next()) {
+				tipoSeguro ts = new tipoSeguro ();
+				ts.setTipoSeguro((rst.getInt("idTipo")));
+				ts.setDescripcion(rst.getString("descripcion"));
+			
+				listaTipoSeguros.add(ts); 
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return listaTipoSeguros;
+	}
+	
+	
+	// CONSULTA SELECT PARA OBTENER EL PROXIMO ID SEGURO
+	public int obtenerProximoIdSeguro() {
+		try {
+		    Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+		    e.printStackTrace();
+		}
+		
+	    int proximoId = 0;
+	    Connection cn = null;
+	    
+	    try {
+	        cn = DriverManager.getConnection(host + dbName, user, pass);
+	        Statement st = cn.createStatement();
+	        String query = "SELECT MAX(idSeguro) AS ultimoId FROM seguros";
+	        ResultSet rs = st.executeQuery(query);
+	        
+	        rs.next();
+	        proximoId = rs.getInt("ultimoId") + 1;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+			try {
+				cn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	    
+	    return proximoId;
+	}
+	
+	
 	// AGREGAMOS SEGURO CON PreparedStatement PARA EVITAR ERRORES CON LOS NUMEROS DECIMALES
 	public int agregarSeguro(Seguro seguro) {
 		try {
 		    Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		}
 	    	    
@@ -55,119 +122,9 @@ public class DaoSeguro {
 
 	    return filas;
 	}
-	
-	
-	// LISTA DE TIPOS DE SEGUROS
-	public ArrayList<tipoSeguro> listarTipoSeguros()
-	{
-		try {
-		    Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
 		
-		ArrayList<tipoSeguro> listaTipoSeguros = new ArrayList<tipoSeguro>();
-		String query = "Select * from tiposeguros";
-		
-		Connection conec = null;
-		
-		try {
-			conec = DriverManager.getConnection(host + dbName, user, pass);
-			Statement st = conec.createStatement();
-			ResultSet rst = st.executeQuery(query);
-			
-			while(rst.next()) {
-				tipoSeguro ts = new tipoSeguro ();
-				ts.setTipoSeguro((rst.getInt("idTipo")));
-				ts.setDescripcion(rst.getString("descripcion"));
-			
-				listaTipoSeguros.add(ts); 
-			}
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		return listaTipoSeguros;
-	}
 	
-	
-	// LISTA DE SEGUROS
-	public ArrayList<seguroConDescTipo> listarSeguros()
-	{
-	    try {
-	        Class.forName("com.mysql.jdbc.Driver");
-	    } catch (ClassNotFoundException e) {
-	        e.printStackTrace();
-	    }
-
-	    ArrayList<seguroConDescTipo> listarSeguros = new ArrayList<seguroConDescTipo>();
-	    String query = "SELECT s.idSeguro, s.descripcion AS descripcionSeguro, s.costoContratacion, s.costoAsegurado, t.descripcion AS descripcionTipo " +
-	                   "FROM seguros s JOIN tiposeguros t ON s.idTipo = t.idTipo";
-
-	    Connection conec = null;
-
-	    try {
-	        conec = DriverManager.getConnection(host + dbName, user, pass);
-	        Statement st = conec.createStatement();
-	        ResultSet rst = st.executeQuery(query);
-
-	        while(rst.next()) {
-	            seguroConDescTipo seg = new seguroConDescTipo();
-
-	            seg.setIdSeguro(rst.getInt("idSeguro"));
-	            seg.setDescripcion(rst.getString("descripcionSeguro"));
-	            seg.setDescripcionTipoSeguro(rst.getString("descripcionTipo"));
-	            seg.setCostoContratacion(rst.getInt("costoContratacion"));
-	            seg.setCostoMaximoAsegurado(rst.getInt("costoAsegurado"));
-
-	            listarSeguros.add(seg); 
-	        }
-	        conec.close();
-	    }
-	    catch(Exception e) {
-	        e.printStackTrace();
-	    }
-
-	    return listarSeguros;
-	}
-
-	
-	
-	// CONSULTA SELECT PARA OBTENER EL PROXIMO ID SEGURO
-	public int obtenerProximoIdSeguro() {
-		try {
-		    Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-		
-	    int proximoId = 0;
-	    Connection cn = null;
-	    
-	    try {
-	        cn = DriverManager.getConnection(host + dbName, user, pass);
-	        Statement st = cn.createStatement();
-	        String query = "SELECT MAX(idSeguro) AS ultimoId FROM seguros";
-	        ResultSet rs = st.executeQuery(query);
-	        
-	        rs.next();
-	        proximoId = rs.getInt("ultimoId") + 1;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-			try {
-				cn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	    
-	    return proximoId;
-	}
-	
+	// LISTA DE SEGUROS FILTRADOS POR ID
 	public ArrayList<seguroConDescTipo> filtrarSeguros(int id) {
 	    try {
 	        Class.forName("com.mysql.jdbc.Driver");
@@ -177,10 +134,10 @@ public class DaoSeguro {
 
 	    ArrayList<seguroConDescTipo> listaSegurosFiltrados = new ArrayList<seguroConDescTipo>();
 	    String query = "SELECT s.idSeguro, s.descripcion AS descripcionSeguro, s.idTipo, s.costoContratacion, s.costoAsegurado"
-	    		+ "		, tipoSeg.descripcion AS descripcionTipo " +
-	                   "FROM seguros s " +
-	                   "JOIN tiposeguros tipoSeg ON s.idTipo = tipoSeg.idTipo " +
-	                   "WHERE s.idTipo = ?";
+	    				+ ", tipoSeg.descripcion AS descripcionTipo "
+	    				+ "FROM seguros s "
+	    				+ "JOIN tiposeguros tipoSeg ON s.idTipo = tipoSeg.idTipo "
+	    				+ "WHERE s.idTipo = ?";
 
 	    Connection conec = null;
 
@@ -202,6 +159,7 @@ public class DaoSeguro {
 
 	            listaSegurosFiltrados.add(seg);
 	        }
+	        
 	        conec.close();
 	    }
 	    catch(Exception e) {
@@ -209,5 +167,49 @@ public class DaoSeguro {
 	    }
 
 	    return listaSegurosFiltrados;
+	}
+	
+	
+	// LISTA DE SEGUROS
+	public ArrayList<seguroConDescTipo> listarSeguros()	{
+	    try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+
+	    ArrayList<seguroConDescTipo> listarSeguros = new ArrayList<seguroConDescTipo>();
+	    String query = "SELECT s.idSeguro, s.descripcion AS descripcionSeguro, s.idTipo, s.costoContratacion, s.costoAsegurado"
+						+ ", tipoSeg.descripcion AS descripcionTipo "
+						+ "FROM seguros s "
+						+ "JOIN tiposeguros tipoSeg ON s.idTipo = tipoSeg.idTipo ";
+
+	    Connection conec = null;
+
+	    try {
+	        conec = DriverManager.getConnection(host + dbName, user, pass);
+	        Statement st = conec.createStatement();
+	        ResultSet rst = st.executeQuery(query);
+
+	        while(rst.next()) {
+	            seguroConDescTipo seg = new seguroConDescTipo();
+	            
+	            seg.setIdSeguro(rst.getInt("idSeguro"));
+	            seg.setDescripcion(rst.getString("descripcionSeguro"));
+	            seg.setIdTipoSeguro(rst.getInt("idTipo"));
+	            seg.setDescripcionTipoSeguro(rst.getString("descripcionTipo"));
+	            seg.setCostoContratacion(rst.getDouble("costoContratacion"));
+	            seg.setCostoMaximoAsegurado(rst.getDouble("costoAsegurado"));
+
+	            listarSeguros.add(seg); 
+	        }
+	        
+	        conec.close();
+	    }
+	    catch(Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return listarSeguros;
 	}
 }

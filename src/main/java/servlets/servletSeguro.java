@@ -22,20 +22,21 @@ public class servletSeguro extends HttpServlet {
        
     public servletSeguro() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         DaoSeguro dao = new DaoSeguro();
 
-        // OBTENEMOS TODOS LOS TIPOS DE SEGUROS
-        ArrayList<tipoSeguro> listaTipoSeguros = dao.listarTipoSeguros();
-        request.setAttribute("listaTS", listaTipoSeguros);
-        
-        // OBTENEMOS PRIXIMO ID DE SEGURO
-        int proximoId  = dao.obtenerProximoIdSeguro();
-        request.setAttribute("proximoId", proximoId);
+        if (request.getParameter("btnCargaTS") != null) {        	
+        	// OBTENEMOS TODOS LOS TIPOS DE SEGUROS
+        	ArrayList<tipoSeguro> listaTipoSeguros = dao.listarTipoSeguros();
+        	request.setAttribute("listaTS", listaTipoSeguros);
+        	
+        	// OBTENEMOS PRIXIMO ID DE SEGURO
+        	int proximoId  = dao.obtenerProximoIdSeguro();
+        	request.setAttribute("proximoId", proximoId);
+        }
 
         if (request.getParameter("btnAceptar") != null) {
             String descripcion = request.getParameter("txtDescripcion");
@@ -53,36 +54,32 @@ public class servletSeguro extends HttpServlet {
 
             request.setAttribute("cantFilas", filas);
         }
+        
+        // MOSTRAMOS TODOS LOS SEGUROS UTILIZANDO HYPERLINK EN ListarSeguros.jsp
+		if(request.getParameter("MostrarSeguros") != null) {
+			ArrayList<seguroConDescTipo> lista = dao.listarSeguros();			
+			request.setAttribute("listaS", lista);
+			
+			RequestDispatcher rd = request.getRequestDispatcher("/ListarSeguros.jsp");
+			rd.forward(request, response);
+		}
 
         // REQUESTDISPACHER
         RequestDispatcher rd = request.getRequestDispatcher("/AgregarSeguro.jsp");
         rd.forward(request, response);
     }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		doGet(request, response);
-		
-		
-		DaoSeguro daoSeg = new DaoSeguro();
-		ArrayList<seguroConDescTipo> lista= daoSeg.listarSeguros();
-		
-		request.setAttribute("listaSegurosConDescripcion", lista);
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/ListarSeguros.jsp");
-		rd.forward(request, response);
-		
-		if(request.getParameter("fitrarTabla")!=null)
-		{
-			int Filas = Integer.parseInt(request.getParameter("tipoSeguro"));
-			ArrayList<seguroConDescTipo> listaFiltro = daoSeg.filtrarSeguros(Filas);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		if(request.getParameter("fitrarTabla") != null) {
+			DaoSeguro daoSeg = new DaoSeguro();
+			int idTipoSeguro = Integer.parseInt(request.getParameter("tipoSeguro"));
+			ArrayList<seguroConDescTipo> listaFiltro = daoSeg.filtrarSeguros(idTipoSeguro);
 			
-			request.setAttribute("filtroU",listaFiltro);
+			request.setAttribute("listaS", listaFiltro);
 			
-			rd = request.getRequestDispatcher("/ListarSeguros.jsp");
-			rd.forward(request, response);
-		}
-		
+			RequestDispatcher rd = request.getRequestDispatcher("/ListarSeguros.jsp");
+			rd.forward(request, response);				
+		}		
 	}
 
 }

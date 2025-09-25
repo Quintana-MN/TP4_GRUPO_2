@@ -7,13 +7,10 @@
 <title>Página de inicio.</title>
 </head>
 <body>
-<a href="AgregarSeguro.jsp">
-Agregar Sucursal
-</a>
-<br>
-<a href="ListarSeguros.jsp">
-Listar Seguros
-</a>
-<h1>Soy la página de Inicio.</h1>
+	<a href="Inicio.jsp">Inicio</a>
+	<a href="AgregarSeguro.jsp">Agregar Sucursal</a>
+	<a href="ListarSeguros.jsp">Listar Seguros</a>
+	
+	<h1>Soy la página de Inicio.</h1>
 </body>
 </html>
